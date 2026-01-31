@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { View, Post, SiteConfig } from './types';
 import { MOCK_POSTS } from './constants';
@@ -16,7 +15,7 @@ const DEFAULT_CONFIG: SiteConfig = {
   primaryColor: '#E31B23',
   siteName: '서울소방GPT',
   showHero: true,
-  heroImageUrl: 'https://images.unsplash.com/photo-1582266255765-fa5cf1a1d501?auto=format&fit=crop&q=80&w=1200&h=1200'
+  heroImageUrl: 'https://images.unsplash.com/photo-1619623602162-81c83ecf1b5e?auto=format&fit=crop&q=80&w=1200&h=1200'
 };
 
 const App: React.FC = () => {
@@ -46,7 +45,13 @@ const App: React.FC = () => {
     try {
       const savedConfig = localStorage.getItem('seoul_fire_config');
       if (savedConfig) {
-        return JSON.parse(savedConfig);
+        const parsed = JSON.parse(savedConfig);
+        // Ensure new default image is used if it was the old default
+        if (parsed.heroImageUrl === 'https://images.unsplash.com/photo-1516567727245-ad8c68f3ec93?auto=format&fit=crop&q=80&w=1200&h=1200' || 
+            parsed.heroImageUrl === 'https://images.unsplash.com/photo-1582266255765-fa5cf1a1d501?auto=format&fit=crop&q=80&w=1200&h=1200') {
+          return DEFAULT_CONFIG;
+        }
+        return parsed;
       }
     } catch (error) {
       console.error("Failed to load config from storage:", error);
